@@ -10,14 +10,13 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.UUID;
-
-@Service
+ @Service
 public class CertificateService {
 
     private final CertificateRepository certificateRepository;
     private final StudentRepository studentRepository;
 
-    
+
     private final CertificateTemplateRepository templateRepository;
 
     public CertificateService(CertificateRepository certificateRepository,
