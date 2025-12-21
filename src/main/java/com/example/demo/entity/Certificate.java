@@ -25,5 +25,6 @@ public class Certificate {
 
     private LocalDate issuedDate;
 
-    private String certificateNumber;
+    @Column(unique = true)
+    private String verificationCode;
 }
