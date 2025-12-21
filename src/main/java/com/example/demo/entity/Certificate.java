@@ -27,4 +27,6 @@ public class Certificate {
 
     @Column(unique = true)
     private String verificationCode;
+
+    private String qrCodeUrl;
 }
