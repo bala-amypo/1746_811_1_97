@@ -8,25 +8,17 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/certificates")
 public class CertificateController {
 
-    private final CertificateService service;
+    private final CertificateService certificateService;
 
-    public CertificateController(CertificateService service) {
-        this.service = service;
+    public CertificateController(CertificateService certificateService) {
+        this.certificateService = certificateService;
     }
 
-    @PostMapping("/generate/{studentId}/{templateId}")
-    public Certificate generate(@PathVariable Long studentId,
-                                @PathVariable Long templateId) {
-        return service.generateCertificate(studentId, templateId);
-    }
-
-    @GetMapping("/{certificateId}")
-    public Certificate getCertificate(@PathVariable Long certificateId) {
-        return service.getCertificate(certificateId);
-    }
-
-    @GetMapping("/verify/code/{verificationCode}")
-    public Certificate getByCode(@PathVariable String verificationCode) {
-        return service.getByVerificationCode(verificationCode);
+    @PostMapping("/generate")
+    public Certificate generateCertificate(
+            @RequestParam String studentEmail,
+            @RequestParam String templateName
+    ) {
+        return certificateService.generateCertificate(studentEmail, templateName);
     }
 }
