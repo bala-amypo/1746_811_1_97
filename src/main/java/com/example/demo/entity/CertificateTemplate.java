@@ -1,22 +1,10 @@
-package com.example.demo.entity;
-
-import jakarta.persistence.*;
-import lombok.*;
-
 @Entity
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Getter @Setter @Builder
+@NoArgsConstructor @AllArgsConstructor
 public class CertificateTemplate {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id @GeneratedValue
     private Long id;
 
     private String templateName;
-
-    @Lob
-    private String htmlContent;
+    private String backgroundUrl;
 }
