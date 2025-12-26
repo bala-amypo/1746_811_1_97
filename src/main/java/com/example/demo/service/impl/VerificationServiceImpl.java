@@ -23,13 +23,13 @@ public class VerificationServiceImpl implements VerificationService {
     }
 
     @Override
-    public Certificate verifyByCode(String verificationCode) {
+    public Certificate verify(String verificationCode) {
         Certificate certificate = certificateRepository
                 .findByVerificationCode(verificationCode)
                 .orElseThrow(() -> new RuntimeException("Certificate not found"));
 
         VerificationLog log = new VerificationLog();
-        log.setCertificate(certificate);
+        log.setVerificationCode(verificationCode);
         log.setStatus("SUCCESS");
         log.setVerifiedAt(LocalDateTime.now());
 
