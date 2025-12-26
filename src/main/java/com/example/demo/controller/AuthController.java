@@ -1,7 +1,6 @@
 package com.example.demo.controller;
 
 import com.example.demo.dto.AuthRequest;
-import com.example.demo.dto.AuthResponse;
 import com.example.demo.dto.RegisterRequest;
 import com.example.demo.entity.User;
 import com.example.demo.security.JwtUtil;
@@ -24,15 +23,15 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
-        User user = userService.register(
-                User.builder()
-                        .name(request.getName())
-                        .email(request.getEmail())
-                        .password(request.getPassword())
-                        .role(request.getRole())
-                        .build()
-        );
-        return ResponseEntity.ok(user);
+        User user = User.builder()
+                .name(request.getName())
+                .email(request.getEmail())
+                .password(request.getPassword())
+                .role(request.getRole())
+                .build();
+
+        User saved = userService.register(user); // ✅ NOW TYPE-SAFE
+        return ResponseEntity.ok(saved);
     }
 
     @PostMapping("/login")
