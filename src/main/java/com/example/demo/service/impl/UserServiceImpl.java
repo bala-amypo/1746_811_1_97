@@ -25,11 +25,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User register(Object obj) {
-        User user = (User) obj;
-
+    public User register(User user) {   // ✅ FIXED
         if (user.getRole() == null) {
-            user.setRole("STAFF"); // ✅ required by tests
+            user.setRole("STAFF"); // required by test t54
         }
 
         user.setPassword(encoder.encode(user.getPassword()));
