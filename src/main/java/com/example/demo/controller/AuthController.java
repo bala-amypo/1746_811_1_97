@@ -1,40 +1,36 @@
-package com.example.demo.controller;
-
-import com.example.demo.dto.*;
-import com.example.demo.entity.User;
-import com.example.demo.security.JwtUtil;
-import com.example.demo.service.UserService;
-import org.springframework.http.ResponseEntity;
-
+@RestController
+@RequestMapping("/auth")
 public class AuthController {
 
-    private final UserService service;
-    private final JwtUtil jwt;
+    private final UserService userService;
+    private final JwtUtil jwtUtil;
 
-    public AuthController(UserService s, JwtUtil j) {
-        this.service = s;
-        this.jwt = j;
+    public AuthController(UserService userService, JwtUtil jwtUtil) {
+        this.userService = userService;
+        this.jwtUtil = jwtUtil;
     }
 
-    public ResponseEntity<?> register(RegisterRequest r) {
-        User u = service.register(User.builder()
-                .name(r.getName())
-                .email(r.getEmail())
-                .password(r.getPassword())
-                .role(r.getRole())
-                .build());
-        return ResponseEntity.ok(u);
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody RegisterRequest req) {
+        User u = User.builder()
+                .name(req.getName())
+                .email(req.getEmail())
+                .password(req.getPassword())
+                .role(req.getRole() == null ? "STAFF" : req.getRole())
+                .build();
+        return ResponseEntity.ok(userService.register(u));
     }
 
-    public ResponseEntity<?> login(AuthRequest r) {
-        try {
-            User u = service.findByEmail(r.getEmail());
-            String token = jwt.generateToken(
-                    java.util.Map.of("email",u.getEmail(),"role",u.getRole()),
-                    u.getEmail());
-            return ResponseEntity.ok(new AuthResponse(token));
-        } catch (Exception e) {
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody AuthRequest req) {
+        User u = userService.findByEmail(req.getEmail());
+        if (!u.getPassword().equals(req.getPassword())) {
             return ResponseEntity.status(401).build();
         }
+        String token = jwtUtil.generateToken(
+                Map.of("userId", u.getId(), "email", u.getEmail(), "role", u.getRole()),
+                u.getEmail()
+        );
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 }

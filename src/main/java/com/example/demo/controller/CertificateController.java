@@ -1,29 +1,21 @@
-package com.example.demo.controller;
-
-import com.example.demo.entity.Certificate;
-import com.example.demo.service.CertificateService;
-
-import org.springframework.web.bind.annotation.*;
-
 @RestController
-@RequestMapping("/api/certificates")
+@RequestMapping("/certificates")
 public class CertificateController {
 
-    private final CertificateService certificateService;
+    private final CertificateService service;
 
-    public CertificateController(CertificateService certificateService) {
-        this.certificateService = certificateService;
+    public CertificateController(CertificateService service) {
+        this.service = service;
     }
 
     @PostMapping("/generate")
-    public Certificate generate(
-            @RequestParam Long studentId,
-            @RequestParam Long templateId) {
-        return certificateService.generateCertificate(studentId, templateId);
+    public Certificate generate(@RequestParam Long studentId,
+                                @RequestParam Long templateId) {
+        return service.generateCertificate(studentId, templateId);
     }
 
     @GetMapping("/{id}")
     public Certificate get(@PathVariable Long id) {
-        return certificateService.getCertificate(id);
+        return service.getCertificate(id);
     }
 }

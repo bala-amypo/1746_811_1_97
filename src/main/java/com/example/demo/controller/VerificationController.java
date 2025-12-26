@@ -1,17 +1,15 @@
-package com.example.demo.controller;
-
-import com.example.demo.entity.Certificate;
-import com.example.demo.service.VerificationService;
-
+@RestController
+@RequestMapping("/verify")
 public class VerificationController {
 
     private final VerificationService service;
 
-    public VerificationController(VerificationService s) {
-        this.service = s;
+    public VerificationController(VerificationService service) {
+        this.service = service;
     }
 
-    public Certificate verify(String code) {
+    @GetMapping("/{code}")
+    public Certificate verify(@PathVariable String code) {
         return service.verify(code);
     }
 }

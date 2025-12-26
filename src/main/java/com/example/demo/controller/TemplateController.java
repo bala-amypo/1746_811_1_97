@@ -1,23 +1,20 @@
-package com.example.demo.controller;
-
-import com.example.demo.entity.CertificateTemplate;
-import com.example.demo.service.TemplateService;
-
-import java.util.List;
-
+@RestController
+@RequestMapping("/templates")
 public class TemplateController {
 
     private final TemplateService service;
 
-    public TemplateController(TemplateService s) {
-        this.service = s;
+    public TemplateController(TemplateService service) {
+        this.service = service;
     }
 
-    public CertificateTemplate add(CertificateTemplate t) {
+    @PostMapping
+    public CertificateTemplate add(@RequestBody CertificateTemplate t) {
         return service.addTemplate(t);
     }
 
+    @GetMapping
     public List<CertificateTemplate> list() {
-        return service.getAll();
+        return service.getAllTemplates();
     }
 }
