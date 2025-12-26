@@ -1,21 +1,22 @@
-package com.example.demo.controller;
-
-import com.example.demo.entity.Certificate;
-import com.example.demo.service.CertificateService;
-
+@RestController
+@RequestMapping("/api/certificates")
 public class CertificateController {
 
     private final CertificateService service;
 
-    public CertificateController(CertificateService s) {
-        this.service = s;
+    public CertificateController(CertificateService service) {
+        this.service = service;
     }
 
-    public Certificate generate(Long studentId, Long templateId) {
+    @PostMapping("/generate")
+    public Certificate generate(
+            @RequestParam Long studentId,
+            @RequestParam Long templateId) {
         return service.generateCertificate(studentId, templateId);
     }
 
-    public Certificate get(Long id) {
+    @GetMapping("/{id}")
+    public Certificate get(@PathVariable Long id) {
         return service.getCertificate(id);
     }
 }
