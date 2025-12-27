@@ -531,30 +531,49 @@ CertificateTemplate out = templateService.addTemplate(t);
     // ---------------------------------------------------
     // Section 7: Security & JWT (49-56)
     // ---------------------------------------------------
-    @Test(priority = 49, groups = {"security"})
+     @Test
     public void t49_registerThenLoginProducesToken() {
         RegisterRequest req = new RegisterRequest();
-        req.setName("Admin"); req.setEmail("admin@ex.com"); req.setPassword("secret"); req.setRole("ADMIN");
+        req.setName("Admin");
+        req.setEmail("admin@ex.com");
+        req.setPassword("secret");
+        req.setRole("ADMIN");
 
-        when(userRepository.findByEmail("admin@ex.com")).thenReturn(Optional.empty());
-        when(userRepository.save(any(com.example.demo.entity.User.class))).thenAnswer(inv -> {
-            User arg = inv.getArgument(0, User.class);
-            if (arg != null) arg.setId(500L);
-            return arg;
-        });
+        when(userRepository.findByEmail("admin@ex.com"))
+                .thenReturn(Optional.empty());
 
-        User saved = userService.register(User.builder().name(req.getName()).email(req.getEmail()).password(req.getPassword()).role(req.getRole()).build());
-        Assert.assertNotNull(saved.getId());
+        when(userRepository.save(any(User.class)))
+                .thenAnswer(inv -> {
+                    User u = inv.getArgument(0);
+                    u.setId(500L);
+                    return u;
+                });
 
-        when(userRepository.findByEmail("admin@ex.com")).thenReturn(Optional.of(saved));
+        User saved = userService.register(
+                User.builder()
+                        .name(req.getName())
+                        .email(req.getEmail())
+                        .password(req.getPassword())
+                        .role(req.getRole())
+                        .build()
+        );
+
+        when(userRepository.findByEmail("admin@ex.com"))
+                .thenReturn(Optional.of(saved));
 
         AuthRequest ar = new AuthRequest();
-        ar.setEmail("admin@ex.com"); ar.setPassword(req.getPassword());
-        var resp = authController.login(ar);
+        ar.setEmail("admin@ex.com");
+        ar.setPassword("secret");
+
+        ResponseEntity<?> resp = authController.login(ar);
         Assert.assertEquals(resp.getStatusCodeValue(), 200);
-        var token = ((com.example.demo.dto.AuthResponse) resp.getBody()).getToken();
+
+        AuthResponse body = (AuthResponse) resp.getBody();
+        String token = body.getToken();
+
         Assert.assertTrue(jwtUtil.validateToken(token));
     }
+}
 
     @Test(priority = 50, groups = {"security"})
     public void t50_invalidLoginRejected() {
