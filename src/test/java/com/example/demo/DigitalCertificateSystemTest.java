@@ -158,7 +158,7 @@ public class DigitalCertificateSystemTest {
     public void t11_listStudents() {
         Student s = Student.builder().id(1L).name("C").email("c@ex.com").rollNumber("R003").build();
         when(studentRepository.findAll()).thenReturn(List.of(s));
-        var list = studentService.getAllStudents();
+List<Student> list = studentService.getAllStudents();
         Assert.assertEquals(list.size(), 1);
     }
 
@@ -171,7 +171,7 @@ public class DigitalCertificateSystemTest {
             if (arg != null) arg.setId(2L);
             return arg;
         });
-        var out = templateService.addTemplate(t);
+CertificateTemplate out = templateService.addTemplate(t);
         Assert.assertEquals(out.getTemplateName(), "T1");
     }
 
