@@ -704,4 +704,4 @@ CertificateTemplate out = templateService.addTemplate(t);
         Assert.assertNotNull(userService);
         Assert.assertNotNull(certificateService);
     }
-}
+
